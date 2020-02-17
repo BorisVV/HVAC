@@ -1,4 +1,4 @@
-
+package main.java;
 
 import java.util.Date;
 
@@ -7,15 +7,12 @@ import java.util.Date;
  */
 public class ServiceCall {
 
-    protected String serviceAddress;
-    protected String problemDescription;
-    protected Date reportedDate;
-    protected Date resolvedDate;
-
-    protected final static double UNRESOLVED = -1  ;  //Flag to indicate this hasn't been resolved so we don't have a fee yet
-    
-    protected String resolution;
+    protected String serviceAddress, problemDescription, resolution;
+    protected Date reportedDate, resolvedDate;
     protected double fee;
+
+    protected final static double UNRESOLVED = -1;  //Flag to indicate this hasn't been resolved so we don't have a fee yet
+
 
     public ServiceCall(String serviceAddress, String problemDescription, Date date) {
         this.serviceAddress = serviceAddress;

@@ -1,9 +1,9 @@
-
+package main.java;
 
 import java.util.Date;
 
 /**
- * Represents a service call to fix a central AC until
+ * Represents a service call to fix a central AC until unit
  */
 public class CentralAC extends ServiceCall{
 
@@ -29,7 +29,7 @@ public class CentralAC extends ServiceCall{
 
         //These statements use the Java ternary operator
         //This says "if resolvedDate == null, then set resolvedDate to "Unresolved". Otherwise, set resolvedDate to resolvedDate.toString()
-        //Same logic as an if-else statment, but more consise if the condition is simple and the if statment's task is 
+        //Same logic as an if-else statement, but more concise if the condition is simple and the if statement task is
         //to set the value of a variable based on a condition being true or false. 
         String resolvedDateString = ( resolvedDate == null) ? "Unresolved" : this.resolvedDate.toString();
         String resolutionString = ( this.resolution == null) ? "Unresolved" : this.resolution;

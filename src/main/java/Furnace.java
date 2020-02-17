@@ -1,4 +1,4 @@
-
+package main.java;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,7 +50,7 @@ public class Furnace extends ServiceCall {
 
         static HashMap<Integer, String> furnaceTypes;
 
-        //Static initializaion block
+        //Static initialization block
         static {
             furnaceTypes = new HashMap<Integer, String>();
             furnaceTypes.put(FORCED_AIR,"Forced Air");
@@ -58,37 +58,24 @@ public class Furnace extends ServiceCall {
             furnaceTypes.put(OCTOPUS,"Older 'Octopus' Style");
         }
 
-        public static String getTypeString(int typeInt) {
-
-            if (furnaceTypes.containsKey(typeInt)) {
-                return furnaceTypes.get(typeInt);
-            }
-            else {
-                return "Unknown type";
-            }
-
+        public static String getTypeString(int userInput) {
+            return furnaceTypes.get(userInput);
         }
 
         public static String furnaceTypeUserChoices() {
-
             //Get all of the keys from the Hashmap and sort them in order
             ArrayList<Integer> keys = new ArrayList<Integer>(furnaceTypes.keySet());
             Collections.sort(keys);
 
-
-            //Build and return a string of all the keys and their values
-            String userChoices = "";
+            //Build and return a string of all the keys and their values and
+            //Display them to the user,
+            String displayChoice = "";
             for (Integer k : keys) {
-
-                userChoices = userChoices + k + " : " + furnaceTypes.get(k) + "\n";
-
+                displayChoice = displayChoice + k + " : " + furnaceTypes.get(k) + "\n";
             }
-
-            return userChoices;
+            return "Types of furnaces: \n" + displayChoice;
         }
 
     }
-
-
 
 }

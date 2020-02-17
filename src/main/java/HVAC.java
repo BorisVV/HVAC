@@ -1,4 +1,4 @@
-
+package main.java;
 
 import java.util.LinkedList;
 import java.util.Date;
@@ -14,7 +14,10 @@ public class HVAC {
     private static LinkedList<ServiceCall> resolvedServiceCalls;
 
     private static Scanner scanner;   //Global scanner used for all input
+    static String furnaces = Furnace.FurnaceTypeManager.furnaceTypeUserChoices();
 
+    // Global user input
+    static String userInput = " ";
 
     public static void main(String[] args) {
 
@@ -44,7 +47,7 @@ public class HVAC {
             System.out.println("5. Print all resolved calls ");
             System.out.println("6. Quit");
 
-            int choice = getPositiveIntInput();
+            int choice = getIntUserInput();
 
             switch (choice) {
 
@@ -149,12 +152,12 @@ public class HVAC {
         System.out.println("2. Add service call for AC unit");
         System.out.println("3. Quit");
 
-        int choice = getPositiveIntInput();
+        int choice = getIntUserInput();
 
         switch (choice) {
 
             case 1: {
-
+                // Case 1 was called (furnaces)
                 System.out.println("Enter address of furnace");
                 String address = getStringInput();
 
@@ -163,19 +166,33 @@ public class HVAC {
 
                 int type = 0;
                 while (type < 1 || type > 3) {
-                    System.out.println("Type of furnace?\n" +
-                            Furnace.FurnaceTypeManager.furnaceTypeUserChoices());
-                            //We can only choose from types defined in FurnaceTypeManager
-                    type = getPositiveIntInput();
+                    System.out.println(furnaces);
+                    //We can only choose from types defined in FurnaceTypeManager
+                    try {
+                        // Declared global variable to get the user input.
+                        userInput = scanner.nextLine();
+                        type = Integer.parseInt(userInput); // Parse to see if the user entered an integer.
+                        if (type < 1 || type > 3) {
+                            // If the user enters any other number that is not in the list, print next line...
+                            System.out.println("Number must match one of the number provided in the list, \nTry again...");
+                        }
+                    }
+                    catch (NumberFormatException ime){
+                        // Catch anything that is not an integer.
+                        System.out.println("Number must be an integer and must match one of the number provided in the list. \nTry again...");
+                    }
                 }
 
+                // Load the information to the object created below for the type of furnace picked.
                 Furnace f = new Furnace(address, problem, new Date(), type);
 
+                // Add the object into the array of LinkedList <todayServiceCalls>.
                 todayServiceCalls.add(f);
-                System.out.println("Added the following furnace to list of calls:\n" + f);
-                break;
+                System.out.println("...Added the following furnace to list of calls:\n" + f);
 
+                break; // Break case 1.
             }
+
             case 2: {
 
                 System.out.println("Enter address of AC Unit");
@@ -188,8 +205,7 @@ public class HVAC {
                 CentralAC ac = new CentralAC(address, problem, new Date(), model);
                 todayServiceCalls.add(ac);
                 System.out.println("Added the following AC unit to list of calls:\n" + ac);
-                break;
-
+                break; // Break case 2.
             }
             case 3: {
                 return;
@@ -198,31 +214,21 @@ public class HVAC {
             default: {
                 System.out.println("Enter a number from the menu choices");
             }
-
         }
-
     }
 
-
     //Validation methods
-
-    private static int getPositiveIntInput() {
-
+    private static int getIntUserInput() {
         while (true) {
             try {
                 String stringInput = scanner.nextLine();
-                int intInput = Integer.parseInt(stringInput);
-                if (intInput >= 0) {
-                    return intInput;
-                } else {
-                    System.out.println("Please enter a positive number");
-                    continue;
-                }
+                int intUserInput = Integer.parseInt(stringInput);
+                return intUserInput;
+             //If not a number (int) display a message to the user.
             } catch (NumberFormatException ime) {
-                System.out.println("Please type a positive number");
+                System.out.println("Please enter only a number that is on the list provided.");
             }
         }
-
     }
 
     private static double getPositiveDoubleInput() {
