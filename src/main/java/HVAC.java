@@ -5,41 +5,35 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class HVAC {
-
-
     /** Program to manage service calls to furnaces and AC units
      */
 
+    // Create a LinkedList object that store information provided by the user.
     private static LinkedList<ServiceCall> todayServiceCalls;
     private static LinkedList<ServiceCall> resolvedServiceCalls;
-
-    private static Scanner scanner;   //Global scanner used for all input
+    //Global scanner used for all input
+    private static Scanner scanner = new Scanner(System.in);
+    // Create a variable that will be used in more than one instance when the Furnace model is called.
     static String furnaces = Furnace.FurnaceTypeManager.furnaceTypeUserChoices();
-
-    // Global user input
+    // Global user input is used
     static String userInput = " ";
 
     public static void main(String[] args) {
-
-        //Use todayServiceCalls as a Queue
-        //So, add new calls to the end with add()
-        //Remove a resolved call from the front of the queue with remove()
-        //Check on the current call - the one at the head of the queue - with peek()
+        // Use todayServiceCalls as a Queue, So, add new calls to the end with add()
+        // Remove a resolved call from the front of the queue with remove()
+        // Check on the current call - the one at the head of the queue - with peek()
 
         //This will enable us to deal with calls in the order in which they were received
-
         todayServiceCalls = new LinkedList<ServiceCall>();
 
         // This will be used to store a list of resolved service calls.
-
         resolvedServiceCalls = new LinkedList<ServiceCall>();
 
-        scanner = new Scanner(System.in);
-
+        // quit will be change to true inside the while loop once the user selects quit.
         boolean quit = false;
 
         while (!quit) {
-
+            // Display choices for user to pick...
             System.out.println("1. Add service call to queue");
             System.out.println("2. Resolve current call");
             System.out.println("3. Print current call");
@@ -47,9 +41,17 @@ public class HVAC {
             System.out.println("5. Print all resolved calls ");
             System.out.println("6. Quit");
 
-            int choice = getIntUserInput();
+//            int userChoice = getIntUserInput();
+            // Get the number the user selected, if the user does not select a number, the program loop again.
+            int userChoice = 0;
+            try {
+                userInput = scanner.nextLine();
+                userChoice = Integer.parseInt(userInput);
+            }catch (NumberFormatException nfe){
+                System.out.println("Error with selection. Only numbers accepted...");
+            }
 
-            switch (choice) {
+            switch (userChoice) {
 
                 case 1: {
                     addServiceCall();
@@ -130,7 +132,7 @@ public class HVAC {
                 }
 
                 default: {
-                    System.out.println("Enter a number from the menu choices");
+                    System.out.println("Enter a number from the menu list provided only!");
                 }
 
             }
