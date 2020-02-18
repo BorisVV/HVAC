@@ -17,6 +17,7 @@ public class HVAC {
     static String furnaces = Furnace.FurnaceTypeManager.furnaceTypeUserChoices();
     // Global user input is used
     static String userInput = " ";
+    static boolean quit = false;
 
     public static void main(String[] args) {
         // Use todayServiceCalls as a Queue, So, add new calls to the end with add()
@@ -25,13 +26,10 @@ public class HVAC {
 
         //This will enable us to deal with calls in the order in which they were received
         todayServiceCalls = new LinkedList<ServiceCall>();
-
         // This will be used to store a list of resolved service calls.
         resolvedServiceCalls = new LinkedList<ServiceCall>();
 
         // quit will be change to true inside the while loop once the user selects quit.
-        boolean quit = false;
-
         while (!quit) {
             // Display choices for user to pick...
             System.out.println("1. Add service call to queue");
@@ -41,32 +39,27 @@ public class HVAC {
             System.out.println("5. Print all resolved calls ");
             System.out.println("6. Quit");
 
-//            int userChoice = getIntUserInput();
             // Get the number the user selected, if the user does not select a number, the program loop again.
-            int userChoice = 0;
-            try {
-                userInput = scanner.nextLine();
-                userChoice = Integer.parseInt(userInput);
-            }catch (NumberFormatException nfe){
-                System.out.println("Error with selection. Only numbers accepted...");
-            }
+            int userChoice = getIntUserInput();
 
+            // User picked a number and used to get the right case with its statement.
             switch (userChoice) {
 
                 case 1: {
+                    // Will call the method below to add a new service call.
                     addServiceCall();
                     break;
                 }
                 case 2: {
-                    //Resolve service call
+                    //Resolve current call (service call), in LinkedList it will be the first on in the Queue.
 
-                    //Remove from head of the queue
-
+                    // First verify that the list is not empty.
                     if (todayServiceCalls.isEmpty()) {
                         System.out.println("No service calls today");
                         break;
                     }
 
+                    //Remove from head of the queue, in other words, this is not a database. Each call is treated this way.
                     ServiceCall resolvedCall = todayServiceCalls.remove();
 
                     System.out.println("Enter resolution for " + resolvedCall);
@@ -149,86 +142,84 @@ public class HVAC {
     private static void addServiceCall() {
 
         //What type of thing needs servicing?
+        while (!quit){
+            System.out.println("1. Add service call for furnace");
+            System.out.println("2. Add service call for AC unit");
+            System.out.println("3. Quit");
 
-        System.out.println("1. Add service call for furnace");
-        System.out.println("2. Add service call for AC unit");
-        System.out.println("3. Quit");
+            int userChoice = getIntUserInput();
 
-        int choice = getIntUserInput();
+            switch (userChoice) {
+                // Each case has its statement, if user picks up it will run the code in the statement.
+                case 1: {
+                    // Case 1 was called (furnaces)
+                    System.out.println("Enter address of furnace");
+                    String address = getStringInput();
 
-        switch (choice) {
+                    System.out.println("Enter description of problem");
+                    String problem = getStringInput();
 
-            case 1: {
-                // Case 1 was called (furnaces)
-                System.out.println("Enter address of furnace");
-                String address = getStringInput();
-
-                System.out.println("Enter description of problem");
-                String problem = getStringInput();
-
-                int type = 0;
-                while (type < 1 || type > 3) {
-                    System.out.println(furnaces);
-                    //We can only choose from types defined in FurnaceTypeManager
-                    try {
-                        // Declared global variable to get the user input.
-                        userInput = scanner.nextLine();
-                        type = Integer.parseInt(userInput); // Parse to see if the user entered an integer.
+                    int type = 0;
+                    while (type < 1 || type > 3) {
+                        System.out.println(furnaces);
+                        //We can only choose from types defined in FurnaceTypeManager
+                        type = getIntUserInput(); // Call method for int only.
                         if (type < 1 || type > 3) {
                             // If the user enters any other number that is not in the list, print next line...
                             System.out.println("Number must match one of the number provided in the list, \nTry again...");
                         }
+
                     }
-                    catch (NumberFormatException ime){
-                        // Catch anything that is not an integer.
-                        System.out.println("Number must be an integer and must match one of the number provided in the list. \nTry again...");
-                    }
+
+                    // Load the information to the object created below for the type of furnace picked.
+                    Furnace f = new Furnace(address, problem, new Date(), type);
+
+                    // Add the object into the array of LinkedList <todayServiceCalls>.
+                    todayServiceCalls.add(f);
+                    System.out.println("...Added the following furnace to list of calls:\n" + f);
+
+                    break; // Break case 1.
                 }
 
-                // Load the information to the object created below for the type of furnace picked.
-                Furnace f = new Furnace(address, problem, new Date(), type);
+                case 2: {
 
-                // Add the object into the array of LinkedList <todayServiceCalls>.
-                todayServiceCalls.add(f);
-                System.out.println("...Added the following furnace to list of calls:\n" + f);
+                    System.out.println("Enter address of AC Unit");
+                    String address = getStringInput();
+                    System.out.println("Enter description of problem");
+                    String problem = getStringInput();
+                    System.out.println("Enter model of AC unit");
+                    String model = getStringInput();
 
-                break; // Break case 1.
+                    CentralAC ac = new CentralAC(address, problem, new Date(), model);
+                    todayServiceCalls.add(ac);
+                    System.out.println("Added the following AC unit to list of calls:\n" + ac);
+                    break; // Break case 2.
+                }
+                case 3: {
+                    quit = true;
+                    break;
+
+                }
+                default: { // Display this message if the number is other that the ones in the case list.
+                    System.out.println("Enter a number from the list provided only.");
+                }
             }
 
-            case 2: {
-
-                System.out.println("Enter address of AC Unit");
-                String address = getStringInput();
-                System.out.println("Enter description of problem");
-                String problem = getStringInput();
-                System.out.println("Enter model of AC unit");
-                String model = getStringInput();
-
-                CentralAC ac = new CentralAC(address, problem, new Date(), model);
-                todayServiceCalls.add(ac);
-                System.out.println("Added the following AC unit to list of calls:\n" + ac);
-                break; // Break case 2.
-            }
-            case 3: {
-                return;
-
-            }
-            default: {
-                System.out.println("Enter a number from the menu choices");
-            }
         }
     }
 
     //Validation methods
     private static int getIntUserInput() {
+        // User must enter an integer.
         while (true) {
             try {
-                String stringInput = scanner.nextLine();
-                int intUserInput = Integer.parseInt(stringInput);
+                // Call the global variable userInput for the scanner.
+                userInput = scanner.nextLine();
+                int intUserInput = Integer.parseInt(userInput);
                 return intUserInput;
-             //If not a number (int) display a message to the user.
+             //If not an integer display a message to the user.
             } catch (NumberFormatException ime) {
-                System.out.println("Please enter only a number that is on the list provided.");
+                System.out.println("Please enter an integer (number only).");
             }
         }
     }
